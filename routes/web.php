@@ -123,6 +123,27 @@ Route::get('/many-to-many-pivot', function() {
     }
 });
 
+/**
+ * Relacionamento One To One - Polimórfico
+ */
+Route::get('/one-to-one-polimorfic', function() {
+    $user = User::find(3);
+
+    $data = [
+        'path' => 'images/user3-image.png'
+    ];
+
+    if($user->image) {
+        $user->image->update($data);
+    } else {
+        $user->image()->create($data);
+    }
+
+    $user->refresh();
+
+    dd($user->image);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
