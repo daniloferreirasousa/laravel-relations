@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\{
     User,
-    Preference
+    Preference,
+    Permission
 };
 
 use App\Models\Course\{
@@ -12,6 +13,9 @@ use App\Models\Course\{
     Lesson
 };
 
+/**
+ * Relacionamento Um Para Um
+ */
 Route::get('/one-to-one', function () {
     $user = User::with('preference')->first();
 
@@ -35,6 +39,9 @@ Route::get('/one-to-one', function () {
     dd($user->preference);
 });
 
+/**
+ * Relacionamento Um Para Muitos
+ */
 Route::get('/one-to-many', function() {
     // $course = Course::create(['name' => 'Relacionamentos Laravel', 'available' => true]);
 
@@ -68,11 +75,52 @@ Route::get('/one-to-many', function() {
         echo "</li>";
     }
     echo "</ul>";
+});
+
+/**
+ * Relacionamento Muitos Para Muitos
+ */
+Route::get('/many-to-many', function() {
+    $user = User::with('permissions')->find(1);
+
+    $permission = Permission::find(1);
+    // $user->permissions()->save($permission);
+    // $user->permissions()->saveMany([
+    //     Permission::find(2),
+    //     Permission::find(3)
+    // ]);
+    $user->permissions()->sync([1]);
+    // $user->permissions()->attach([2, 3]);
+    // $user->permissions()->detach([1, 2]);
 
 
 
 
-    // dd($modules);
+    $user->refresh();
+
+
+    dd($user->permissions);
+});
+
+/**
+ * Relacionamento Pivot - Muitos para Muitos
+ */
+Route::get('/many-to-many-pivot', function() {
+    $user = User::with('permissions')->find(1);
+    $user->permissions()->sync([
+        1 => ['active' => true],
+        2 => ['active' => false],
+        4 => ['active' => true]
+    ]);
+    
+    // $user->permissions()->delete();
+
+    $user->refresh();
+
+    echo "<b>{$user->name}</b><hr> Permissões:<br>";
+    foreach($user->permissions as $permission) {
+        echo "{$permission->name} - {$permission->pivot->active}<br>";
+    }
 });
 
 Route::get('/', function () {
