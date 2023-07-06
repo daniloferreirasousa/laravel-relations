@@ -12,6 +12,9 @@ use App\Models\Course\{
     Module,
     Lesson
 };
+use App\Models\Polimorfic\{
+    Comment
+};
 
 /**
  * Relacionamento Um Para Um
@@ -52,13 +55,18 @@ Route::get('/one-to-many', function() {
     //     'name' => 'One To One'
     // ];
 
-    $data = [
-        'name' => 'Aula 1',
-        'url' => 'http://localhost:8989/one-to-many'
-    ];
+    // $data = [
+    //     'name' => 'Aula 1',
+    //     'url' => 'http://localhost:8989/one-to-many'
+    // ];
 
-    //$course->modules()->lessons()->create($data);
     // $course->modules()->create($data);
+
+    // $module = Module::with('lessons')->first();
+
+    // $module->lessons()->create($data);
+
+    // $course->refresh();
 
     echo "Curso: " . $course->name . "<br>";
 
@@ -144,6 +152,30 @@ Route::get('/one-to-one-polimorfic', function() {
     dd($user->image);
 });
 
+/**
+ * Relacionamento One To Many - Polimórfico
+ */
+Route::get('/one-to-many-polimorfic', function() {
+    // $course = Course::first();
+
+    // $course->comments()->create([
+    //     'subject' => 'Segundo comentário',
+    //     'body' => 'Esté é meu Segundo comentário utilizando o One to Many Polimórfico.'
+    // ]);
+
+    // dd($course->comments);
+    $comment = Comment::find(1);
+
+    dd($comment->commentable);
+});
+
+
+/**
+ * Relacionamento Many To Many - Polimórfico
+ */
+Route::get('/many-to-many-polimorfic', function() {
+    
+});
 Route::get('/', function () {
     return view('welcome');
 });
