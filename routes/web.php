@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\{
     User,
     Preference,
-    Permission
+    Permission,
+    Tag
 };
 
 use App\Models\Course\{
@@ -174,8 +175,13 @@ Route::get('/one-to-many-polimorfic', function() {
  * Relacionamento Many To Many - Polimórfico
  */
 Route::get('/many-to-many-polimorfic', function() {
-    
+    $tag = Tag::find(1);
+
+
+    dd($tag->users);
 });
+
+
 Route::get('/', function () {
     return view('welcome');
 });
